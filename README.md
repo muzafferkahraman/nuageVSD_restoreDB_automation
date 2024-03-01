@@ -2,14 +2,14 @@
 
 This repo contains Ansible playbooks that restore a specified database backup at Nuage VSD standalone and cluster.
 
-You can run the playbooks with the commands below
+You can run the playbooks with the commands below.
 
-###### For Standalone:
+###### `For Standalone:`
 
 ```sh
 ansible-playbook sa_vsd_restoration.yaml --extra-vars "backup_file=/tmp/backup/mydatabase-240229060529.tar.gz"
 ```
-###### For Cluster:    
+###### `For Cluster:`    
 ```sh
 ansible-playbook cluster_vsd_restoration.yaml --extra-vars "backup_file=/tmp/backup/mydatabase-240301080020.tar.gz"
 ```
