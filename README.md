@@ -30,7 +30,7 @@ Set the ansible hosts file as below:
 <cluster vsd3 ip>
 
 [vsd_master]
-<cluster master-vsd ip> // geenrally vsd1
+<cluster master-vsd ip> // generally vsd1
 ```
 
 ##### Copy the public keys to the remote servers
