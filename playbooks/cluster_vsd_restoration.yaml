@@ -1,3 +1,7 @@
+# This playbook was created by: Muzaffer Kahraman muzaffer.kahraman@outlook.com
+#
+# Purpose: [This playbook restores the mysql database backup for the Nuage VSD Cluster]
+
 - hosts: vsd_cluster
   tasks:
   - name:  Stop Core Services
