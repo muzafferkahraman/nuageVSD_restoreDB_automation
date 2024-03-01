@@ -1,0 +1,204 @@
+PLAY [vsd_cluster] *************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.85.17.242]
+ok: [10.85.17.243]
+ok: [10.85.17.241]
+
+TASK [Stop Core Services] ******************************************************
+changed: [10.85.17.243] => {"changed": true, "cmd": "monit stop -g vsd-core", "delta": "0:00:00.064820", "end": "2024-03-01 09:28:26.196050", "rc": 0, "start": "2024-03-01 09:28:26.131230", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.242] => {"changed": true, "cmd": "monit stop -g vsd-core", "delta": "0:00:00.066460", "end": "2024-03-01 09:28:26.186851", "rc": 0, "start": "2024-03-01 09:28:26.120391", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.241] => {"changed": true, "cmd": "monit stop -g vsd-core", "delta": "0:00:00.067916", "end": "2024-03-01 09:28:26.205035", "rc": 0, "start": "2024-03-01 09:28:26.137119", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+
+TASK [Wait Until Core Services Stop] *******************************************
+FAILED - RETRYING: Wait Until Core Services Stop (25 retries left).
+FAILED - RETRYING: Wait Until Core Services Stop (25 retries left).
+FAILED - RETRYING: Wait Until Core Services Stop (25 retries left).
+FAILED - RETRYING: Wait Until Core Services Stop (24 retries left).
+changed: [10.85.17.242] => {"attempts": 2, "changed": true, "cmd": "echo \"Not monitored $(monit summary -g vsd-core | grep -o \"Not monitored\" | wc -l)\"", "delta": "0:00:00.083243", "end": "2024-03-01 09:28:37.294802", "rc": 0, "start": "2024-03-01 09:28:37.211559", "stderr": "", "stderr_lines": [], "stdout": "Not monitored 15", "stdout_lines": ["Not monitored 15"]}
+changed: [10.85.17.243] => {"attempts": 2, "changed": true, "cmd": "echo \"Not monitored $(monit summary -g vsd-core | grep -o \"Not monitored\" | wc -l)\"", "delta": "0:00:00.074526", "end": "2024-03-01 09:28:37.301034", "rc": 0, "start": "2024-03-01 09:28:37.226508", "stderr": "", "stderr_lines": [], "stdout": "Not monitored 15", "stdout_lines": ["Not monitored 15"]}
+changed: [10.85.17.241] => {"attempts": 3, "changed": true, "cmd": "echo \"Not monitored $(monit summary -g vsd-core | grep -o \"Not monitored\" | wc -l)\"", "delta": "0:00:00.061166", "end": "2024-03-01 09:28:46.792690", "rc": 0, "start": "2024-03-01 09:28:46.731524", "stderr": "", "stderr_lines": [], "stdout": "Not monitored 15", "stdout_lines": ["Not monitored 15"]}
+
+TASK [Stop Common Services] ****************************************************
+changed: [10.85.17.242] => {"changed": true, "cmd": "monit stop -g vsd-common", "delta": "0:00:00.064555", "end": "2024-03-01 09:28:48.442332", "rc": 0, "start": "2024-03-01 09:28:48.377777", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.243] => {"changed": true, "cmd": "monit stop -g vsd-common", "delta": "0:00:00.067690", "end": "2024-03-01 09:28:48.441497", "rc": 0, "start": "2024-03-01 09:28:48.373807", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.241] => {"changed": true, "cmd": "monit stop -g vsd-common", "delta": "0:00:00.065067", "end": "2024-03-01 09:28:48.444291", "rc": 0, "start": "2024-03-01 09:28:48.379224", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+
+TASK [Wait Until Common Services Stop] *****************************************
+FAILED - RETRYING: Wait Until Common Services Stop (25 retries left).
+FAILED - RETRYING: Wait Until Common Services Stop (25 retries left).
+FAILED - RETRYING: Wait Until Common Services Stop (25 retries left).
+FAILED - RETRYING: Wait Until Common Services Stop (24 retries left).
+FAILED - RETRYING: Wait Until Common Services Stop (24 retries left).
+FAILED - RETRYING: Wait Until Common Services Stop (24 retries left).
+changed: [10.85.17.243] => {"attempts": 3, "changed": true, "cmd": "echo \"Not monitored $(monit summary -g vsd-common | grep -o \"Not monitored\" | wc -l)\"", "delta": "0:00:00.060151", "end": "2024-03-01 09:29:09.146565", "rc": 0, "start": "2024-03-01 09:29:09.086414", "stderr": "", "stderr_lines": [], "stdout": "Not monitored 8", "stdout_lines": ["Not monitored 8"]}
+changed: [10.85.17.242] => {"attempts": 3, "changed": true, "cmd": "echo \"Not monitored $(monit summary -g vsd-common | grep -o \"Not monitored\" | wc -l)\"", "delta": "0:00:00.057064", "end": "2024-03-01 09:29:09.159585", "rc": 0, "start": "2024-03-01 09:29:09.102521", "stderr": "", "stderr_lines": [], "stdout": "Not monitored 8", "stdout_lines": ["Not monitored 8"]}
+changed: [10.85.17.241] => {"attempts": 3, "changed": true, "cmd": "echo \"Not monitored $(monit summary -g vsd-common | grep -o \"Not monitored\" | wc -l)\"", "delta": "0:00:00.064076", "end": "2024-03-01 09:29:09.219803", "rc": 0, "start": "2024-03-01 09:29:09.155727", "stderr": "", "stderr_lines": [], "stdout": "Not monitored 8", "stdout_lines": ["Not monitored 8"]}
+
+PLAY [vsd_master] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.85.17.241]
+
+TASK [Restore the Database Backup] *********************************************
+changed: [10.85.17.241] => {"changed": true, "cmd": "/opt/vsd/bin/vsd-restore.sh -e -m \"/tmp/backup/mydatabase-240301080020.tar.gz\"", "delta": "0:00:12.744426", "end": "2024-03-01 09:29:27.255509", "rc": 0, "start": "2024-03-01 09:29:14.511083", "stderr": "", "stderr_lines": [], "stdout": "-------------------------------------------------------------\n V I R T U A L I Z E D  S E R V I C E S  D I R E C T O R Y   \n (c) 2017 Nuage Networks\n-------------------------------------------------------------\nLog file is at [/opt/vsd/logs/install.log]\nStarting VSD restore [240301092914]\nSetting MySQL max time per database restore to default value [1200]\nStarting VSD database restore...\nBackup file(s) from [/tmp/backup/mydatabase-240301080020.tar.gz] are restored\nValidating md5sum for backup file(s)...\nValidating md5sum for backup /tmp/backup/mydatabase-240301080020.tar.gz is FINISHED\nVSD database restore is FINISHED\nVSD restore is FINISHED [240301092927]", "stdout_lines": ["-------------------------------------------------------------", " V I R T U A L I Z E D  S E R V I C E S  D I R E C T O R Y   ", " (c) 2017 Nuage Networks", "-------------------------------------------------------------", "Log file is at [/opt/vsd/logs/install.log]", "Starting VSD restore [240301092914]", "Setting MySQL max time per database restore to default value [1200]", "Starting VSD database restore...", "Backup file(s) from [/tmp/backup/mydatabase-240301080020.tar.gz] are restored", "Validating md5sum for backup file(s)...", "Validating md5sum for backup /tmp/backup/mydatabase-240301080020.tar.gz is FINISHED", "VSD database restore is FINISHED", "VSD restore is FINISHED [240301092927]"]}
+
+TASK [Display the Restoration Status] ******************************************
+ok: [10.85.17.241] => {
+    "msg": "stdout:\n-------------------------------------------------------------\n V I R T U A L I Z E D  S E R V I C E S  D I R E C T O R Y   \n (c) 2017 Nuage Networks\n-------------------------------------------------------------\nLog file is at [/opt/vsd/logs/install.log]\nStarting VSD restore [240301092914]\nSetting MySQL max time per database restore to default value [1200]\nStarting VSD database restore...\nBackup file(s) from [/tmp/backup/mydatabase-240301080020.tar.gz] are restored\nValidating md5sum for backup file(s)...\nValidating md5sum for backup /tmp/backup/mydatabase-240301080020.tar.gz is FINISHED\nVSD database restore is FINISHED\nVSD restore is FINISHED [240301092927]\n"
+}
+
+TASK [Perform Percona Bootstrap] ***********************************************
+changed: [10.85.17.241] => {"changed": true, "cmd": "/opt/vsd/sysmon/bootPercona.py --force", "delta": "0:00:10.786290", "end": "2024-03-01 09:29:39.689271", "rc": 0, "start": "2024-03-01 09:29:28.902981", "stderr": "", "stderr_lines": [], "stdout": "Running percona in bootstrap mode...\nBoot Percona Status: PASS Desc: Percona started successfully. Command: systemctl start mysql@bootstrap", "stdout_lines": ["Running percona in bootstrap mode...", "Boot Percona Status: PASS Desc: Percona started successfully. Command: systemctl start mysql@bootstrap"]}
+
+TASK [Display the Bootstrap Status] ********************************************
+ok: [10.85.17.241] => {
+    "msg": "stdout:\nRunning percona in bootstrap mode...\nBoot Percona Status: PASS Desc: Percona started successfully. Command: systemctl start mysql@bootstrap\n"
+}
+
+PLAY [vsd_cluster] *************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.85.17.242]
+ok: [10.85.17.243]
+ok: [10.85.17.241]
+
+TASK [Start Common Services] ***************************************************
+changed: [10.85.17.242] => {"changed": true, "cmd": "monit start -g vsd-common", "delta": "0:00:00.062195", "end": "2024-03-01 09:29:45.058917", "rc": 0, "start": "2024-03-01 09:29:44.996722", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.241] => {"changed": true, "cmd": "monit start -g vsd-common", "delta": "0:00:00.066494", "end": "2024-03-01 09:29:45.068093", "rc": 0, "start": "2024-03-01 09:29:45.001599", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.243] => {"changed": true, "cmd": "monit start -g vsd-common", "delta": "0:00:00.061160", "end": "2024-03-01 09:29:45.074684", "rc": 0, "start": "2024-03-01 09:29:45.013524", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+
+TASK [Wait Until Common Services Start] ****************************************
+FAILED - RETRYING: Wait Until Common Services Start (50 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (50 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (50 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (49 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (49 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (49 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (48 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (48 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (48 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (47 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (47 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (47 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (46 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (46 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (46 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (45 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (45 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (45 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (44 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (44 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (44 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (43 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (43 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (43 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (42 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (42 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (42 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (41 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (41 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (41 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (40 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (40 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (40 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (39 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (39 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (39 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (38 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (38 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (38 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (37 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (37 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (37 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (36 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (36 retries left).
+changed: [10.85.17.241] => {"attempts": 15, "changed": true, "cmd": "echo \"Status ok $(monit summary -g vsd-common | grep -o \"Status ok\" | wc -l) Running $(monit summary -g vsd-common | grep -o \"Running\" | wc -l)\"", "delta": "0:00:00.097769", "end": "2024-03-01 09:32:00.834954", "rc": 0, "start": "2024-03-01 09:32:00.737185", "stderr": "", "stderr_lines": [], "stdout": "Status ok 4 Running 4", "stdout_lines": ["Status ok 4 Running 4"]}
+FAILED - RETRYING: Wait Until Common Services Start (35 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (35 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (34 retries left).
+FAILED - RETRYING: Wait Until Common Services Start (34 retries left).
+changed: [10.85.17.243] => {"attempts": 18, "changed": true, "cmd": "echo \"Status ok $(monit summary -g vsd-common | grep -o \"Status ok\" | wc -l) Running $(monit summary -g vsd-common | grep -o \"Running\" | wc -l)\"", "delta": "0:00:00.090847", "end": "2024-03-01 09:32:29.498440", "rc": 0, "start": "2024-03-01 09:32:29.407593", "stderr": "", "stderr_lines": [], "stdout": "Status ok 4 Running 4", "stdout_lines": ["Status ok 4 Running 4"]}
+FAILED - RETRYING: Wait Until Common Services Start (33 retries left).
+changed: [10.85.17.242] => {"attempts": 19, "changed": true, "cmd": "echo \"Status ok $(monit summary -g vsd-common | grep -o \"Status ok\" | wc -l) Running $(monit summary -g vsd-common | grep -o \"Running\" | wc -l)\"", "delta": "0:00:00.086200", "end": "2024-03-01 09:32:39.258819", "rc": 0, "start": "2024-03-01 09:32:39.172619", "stderr": "", "stderr_lines": [], "stdout": "Status ok 4 Running 4", "stdout_lines": ["Status ok 4 Running 4"]}
+
+TASK [Start Core Services] *****************************************************
+changed: [10.85.17.242] => {"changed": true, "cmd": "monit start -g vsd-core", "delta": "0:00:00.074514", "end": "2024-03-01 09:32:40.927349", "rc": 0, "start": "2024-03-01 09:32:40.852835", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.243] => {"changed": true, "cmd": "monit start -g vsd-core", "delta": "0:00:00.068210", "end": "2024-03-01 09:32:40.916109", "rc": 0, "start": "2024-03-01 09:32:40.847899", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+changed: [10.85.17.241] => {"changed": true, "cmd": "monit start -g vsd-core", "delta": "0:00:00.069258", "end": "2024-03-01 09:32:40.925077", "rc": 0, "start": "2024-03-01 09:32:40.855819", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+
+TASK [Wait Until Core Services Start] ******************************************
+FAILED - RETRYING: Wait Until Core Services Start (50 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (50 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (50 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (49 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (49 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (49 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (48 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (48 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (48 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (47 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (47 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (47 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (46 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (46 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (46 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (45 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (45 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (45 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (44 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (44 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (44 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (43 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (43 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (43 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (42 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (42 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (42 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (41 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (41 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (41 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (40 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (40 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (40 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (39 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (39 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (39 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (38 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (38 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (38 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (37 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (37 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (37 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (36 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (36 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (36 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (35 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (35 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (35 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (34 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (34 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (34 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (33 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (33 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (33 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (32 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (32 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (32 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (31 retries left).
+changed: [10.85.17.242] => {"attempts": 20, "changed": true, "cmd": "echo \"Status ok $(monit summary -g vsd-core | grep -o \"Status ok\" | wc -l) Running $(monit summary -g vsd-core | grep -o \"Running\" | wc -l)\"", "delta": "0:00:00.098574", "end": "2024-03-01 09:35:44.026991", "rc": 0, "start": "2024-03-01 09:35:43.928417", "stderr": "", "stderr_lines": [], "stdout": "Status ok 10 Running 5", "stdout_lines": ["Status ok 10 Running 5"]}
+FAILED - RETRYING: Wait Until Core Services Start (31 retries left).
+changed: [10.85.17.241] => {"attempts": 21, "changed": true, "cmd": "echo \"Status ok $(monit summary -g vsd-core | grep -o \"Status ok\" | wc -l) Running $(monit summary -g vsd-core | grep -o \"Running\" | wc -l)\"", "delta": "0:00:00.088828", "end": "2024-03-01 09:35:52.356210", "rc": 0, "start": "2024-03-01 09:35:52.267382", "stderr": "", "stderr_lines": [], "stdout": "Status ok 10 Running 5", "stdout_lines": ["Status ok 10 Running 5"]}
+FAILED - RETRYING: Wait Until Core Services Start (30 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (29 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (28 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (27 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (26 retries left).
+FAILED - RETRYING: Wait Until Core Services Start (25 retries left).
+changed: [10.85.17.243] => {"attempts": 27, "changed": true, "cmd": "echo \"Status ok $(monit summary -g vsd-core | grep -o \"Status ok\" | wc -l) Running $(monit summary -g vsd-core | grep -o \"Running\" | wc -l)\"", "delta": "0:00:00.079631", "end": "2024-03-01 09:36:50.601510", "rc": 0, "start": "2024-03-01 09:36:50.521879", "stderr": "", "stderr_lines": [], "stdout": "Status ok 10 Running 5", "stdout_lines": ["Status ok 10 Running 5"]}
+
+PLAY RECAP *********************************************************************
+10.85.17.241               : ok=15   changed=10   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+10.85.17.242               : ok=10   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+10.85.17.243               : ok=10   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
